@@ -6,6 +6,21 @@ const catchAsync = require("../utils/catchAsync");
 //POST Webinar by the admin
 const createWebinar = catchAsync(async (req, res, next) => {
   const data = req.body;
+  const { name, image, video, description, startTime, endTime } = req.body;
+  if (!name) {
+    return next(new AppError("Please fill the name", 404));
+  }
+  if (!video) {
+    return next(new AppError("Please enter the Video URL", 404));
+  }
+  if (!description) {
+    return next(
+      new AppError("Please enter the description for the Webinar", 404)
+    );
+  }
+  if (startTime > endTime) {
+    return next(new AppError("Start Time should be less than End Time", 404));
+  }
   //   const user_id = req.params._id;
   const webinar = await Webinar.create(data);
 

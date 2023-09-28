@@ -38,8 +38,7 @@ function CreateWebinar() {
     console.log(data);
     if (data.status === "success") {
       toast("Webinar successfully added");
-    }
-    if (data.status === "error") {
+    } else {
       toast(data.message);
     }
   };
