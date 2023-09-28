@@ -45,6 +45,9 @@ function JoinWebinar() {
   );
 }
 function DuringWebinar({ webinarData }) {
+  // const joinedTime = new Date(); // Use the current time for simplicity
+  // const startTime = new Date(webinarData.startTime);
+  // const timeOffsetInSeconds = (joinedTime - startTime) / 1000;
   return (
     <div className="displayWebinar">
       <ReactPlayer
@@ -53,6 +56,13 @@ function DuringWebinar({ webinarData }) {
         controls={true}
         height="600px"
         width="100%"
+        // config={{
+        //   youtube: {
+        //     playerVars: {
+        //       start: timeOffsetInSeconds, // Set the start time offset in seconds
+        //     },
+        //   },
+        // }}
       />
       <h2>Webinar Title: {webinarData.name}</h2>
       <p>Webinar Description: {webinarData.description}</p>

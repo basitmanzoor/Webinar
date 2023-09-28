@@ -58,7 +58,11 @@ function Login() {
     });
     const data = await result.json();
     localStorage.setItem("user", JSON.stringify(data));
-    toast("signup successful");
+
+    toast(data.message);
+    if (data.status === "success") {
+      toast("Signup successful");
+    }
   }
 
   //login data collection
@@ -140,7 +144,6 @@ function Login() {
             <MDBBtn className="mb-4 w-100" onClick={login}>
               Sign in
             </MDBBtn>
-            <ToastContainer />
           </MDBTabsPane>
 
           <MDBTabsPane show={justifyActive === "tab2"}>
@@ -172,17 +175,17 @@ function Login() {
               wrapperClass="mb-4"
               label="PasswordConfirmation"
               id="form4"
-              type="passwordConfirmation"
+              type="password"
               value={passwordConfirmation}
               onChange={(e) => setpasswordConfirmation(e.target.value)}
             />
             <MDBBtn className="mb-4 w-100" onClick={collectData}>
               Sign up
             </MDBBtn>
-            <ToastContainer />
           </MDBTabsPane>
         </MDBTabsContent>
       </MDBContainer>
+      <ToastContainer />
     </div>
   );
 }

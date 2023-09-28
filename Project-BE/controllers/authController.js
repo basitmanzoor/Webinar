@@ -3,6 +3,7 @@ const User = require("./../models/userModel");
 const catchAsync = require("./../utils/catchAsync");
 const jwt = require("jsonwebtoken");
 const AppError = require("./../utils/appError");
+const validator = require("validator");
 
 const signToken = (id, role) => {
   return jwt.sign({ id, role }, process.env.JWT_SECRET, {
@@ -11,6 +12,36 @@ const signToken = (id, role) => {
 };
 
 const signup = catchAsync(async (req, res, next) => {
+  const { name, email, password, passwordConfirmation } = req.body;
+
+  //if the form is empty and the user tries to signup
+  if (!name && !email && !password && !passwordConfirmation) {
+    return next(new AppError("Form is empty", 404));
+  }
+
+  if (password !== passwordConfirmation) {
+    return next(new AppError("Passwords do not match", 400));
+  }
+
+  if (password.length < 8 && password.length > 0) {
+    return next(
+      new AppError("Passwords length is less than 8 characters", 400)
+    );
+  }
+  if (password.length === 0) {
+    return next(new AppError("Password field is empty", 404));
+  }
+  // Check if a user with the same email or name already exists
+  const existingUser = await User.findOne({ $or: [{ email }, { name }] });
+
+  if (existingUser) {
+    if (existingUser.email === email) {
+      return next(new AppError("Email is already registered", 400));
+    }
+    if (existingUser.name === name) {
+      return next(new AppError("Name is already taken", 400));
+    }
+  }
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -33,6 +64,11 @@ const signup = catchAsync(async (req, res, next) => {
 
 const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
+  const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
+
+  if (!emailRegex.test(email)) {
+    throw new Error("Invalid email address");
+  }
   //1) if email and password actually exist
   if (!email || !password) {
     return next(new AppError("Please provide email and password", 400));
