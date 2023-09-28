@@ -39,6 +39,9 @@ function CreateWebinar() {
     if (data.status === "success") {
       toast("Webinar successfully added");
     }
+    if (data.status === "error") {
+      toast(data.message);
+    }
   };
   return (
     <div>

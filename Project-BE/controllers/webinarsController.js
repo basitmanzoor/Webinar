@@ -165,6 +165,9 @@ const attendWebinar = catchAsync(async (req, res, next) => {
   if (!webinar) {
     return next(new AppError("Webinar not found", 404));
   }
+  if (!user) {
+    return next(new AppError("User not found", 404));
+  }
 
   let c = new Date(currentTime);
   let s = new Date(webinar.startTime);
@@ -205,11 +208,12 @@ const attendWebinar = catchAsync(async (req, res, next) => {
       { new: true } // Return the updated document
     );
 
-    if (!updatedUser) {
-      console.log(
-        `Webinar ID ${webinarId} is already in the attendedWebinars array.`
-      );
-    }
+    // if (!updatedUser) {
+    //   // return next(new AppError("updated user not dound", 404));
+    //   console.log(
+    //     `Webinar ID ${webinarId} is already in the attendedWebinars array.`
+    //   );
+    // }
   }, e - c);
 
   res.status(200).json({

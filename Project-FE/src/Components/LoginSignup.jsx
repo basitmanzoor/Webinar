@@ -34,10 +34,8 @@ function Login() {
       decodedToken = jwt_decode(auth);
     }
     if (auth && decodedToken.role === "user") {
-      toast("Login successful");
       navigate("/myhome");
     } else if (auth && decodedToken.role === "admin") {
-      toast("Login successful");
       navigate("/");
     }
   });
@@ -74,6 +72,7 @@ function Login() {
 
     const data = await response.json();
     console.log(data);
+    toast(data.message);
     if (data.status === "success") {
       localStorage.setItem("token", data.token);
       const auth = localStorage.getItem("token");
@@ -84,13 +83,12 @@ function Login() {
       }
 
       if (decodedToken.role === "user") {
-        toast("Login successful");
         navigate("/myhome");
       }
       if (decodedToken.role === "admin") {
-        toast("Login successful");
         navigate("/");
       }
+      toast("Login successful");
     }
   }
 
@@ -181,10 +179,10 @@ function Login() {
             <MDBBtn className="mb-4 w-100" onClick={collectData}>
               Sign up
             </MDBBtn>
+            <ToastContainer />
           </MDBTabsPane>
         </MDBTabsContent>
       </MDBContainer>
-      <ToastContainer />
     </div>
   );
 }

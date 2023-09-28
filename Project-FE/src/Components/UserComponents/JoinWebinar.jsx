@@ -5,7 +5,7 @@ import ReactPlayer from "react-player";
 
 function JoinWebinar() {
   const [webinarData, setWebinarData] = useState([]);
-  const [webinarEnded, setWebinarEnded] = useState(false);
+
   const params = useParams();
   async function getwebinar() {
     const response = await fetch(
@@ -22,7 +22,6 @@ function JoinWebinar() {
 
     if (data.status === "over") {
       setWebinarData(data);
-      setWebinarEnded(true);
     }
     if (data.status === "success") {
       setWebinarData(data.data.webinar);
@@ -30,22 +29,8 @@ function JoinWebinar() {
   }
   useEffect(() => {
     getwebinar();
-
-    // Check the current time periodically
-    const interval = setInterval(() => {
-      const currentTime = new Date().getTime();
-      const endTime = new Date(webinarData.endTime).getTime(); // Assuming webinarData.endTime is a valid date string
-
-      if (currentTime >= endTime) {
-        setWebinarEnded(true);
-        clearInterval(interval); // Stop checking when the webinar ends
-      }
-    }, 1000); // Check every second
-
-    return () => {
-      clearInterval(interval); // Clean up the interval when the component unmounts
-    };
-  }, [webinarData.endTime]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div>

@@ -6,7 +6,7 @@ const webinarSchema = new Schema(
     name: {
       type: String,
       required: [true, "A webinar must have a name"],
-      unique: true,
+      unique: false,
     },
     image: {
       type: String,
@@ -14,8 +14,8 @@ const webinarSchema = new Schema(
     video: {
       type: String,
       required: [true, "A webinar must have a video"],
-      unique: true,
       trim: true,
+      unique: false,
     },
     description: {
       type: String,
